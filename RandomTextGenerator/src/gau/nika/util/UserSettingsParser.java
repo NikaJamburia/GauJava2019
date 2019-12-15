@@ -31,40 +31,102 @@ public class UserSettingsParser implements Parser {
     }
 
     public void setParams(String userInput, UserSettings userSettings) throws InvalidPropertiesFormatException {
-        try {
-            int sentenceCount = Integer.parseInt(
-                    Character.toString(
-                            userInput.charAt(2))
-            );
-            userSettings.setSentenceCount(sentenceCount);
+        int p = userInput.lastIndexOf("p");
+        int s = userInput.lastIndexOf("s");
+        int w = userInput.lastIndexOf("w");
 
-            int minWords = Integer.parseInt(
-                    Character.toString(
-                            userInput.charAt(6))
-            );
-            userSettings.setMinWordsInSentence(minWords);
-
-            int maxWords = Integer.parseInt(
-                    Character.toString(
-                            userInput.charAt(8))
-            );
-            userSettings.setMaxWordsInSentence(maxWords);
-
-            int minSymbols = Integer.parseInt(
-                    Character.toString(
-                            userInput.charAt(12))
-            );
-            userSettings.setMinSymbolsInWord(minSymbols);
-
-            int maxSymbols = Integer.parseInt(
-                    Character.toString(
-                            userInput.charAt(14))
-            );
-            userSettings.setMaxSymbolsInWord(maxSymbols);
-        }
-        catch (Exception e){
+        if(p == -1 || s == -1 || w == -1){
             throw new InvalidPropertiesFormatException("Invalid parameters");
         }
+
+//        try {
+
+            String sentenceCountStr = "";
+            int count = 1;
+            while (true){
+                count++;
+                if(userInput.charAt(p + count) != '-'){
+                    sentenceCountStr += userInput.charAt(p + count);
+                }
+                else {
+                    break;
+                }
+            }
+
+            String minWordsStr = "";
+            String maxWordsStr = "";
+            count = 1;
+            while (true){
+                count++;
+                char currentChar = userInput.charAt(s + count);
+                if(currentChar != '-'){
+                    minWordsStr += currentChar;
+                }
+                else {
+                    int position = s + count;
+                    count = 1;
+                    while (true){
+                        char newCurrentChar = userInput.charAt(position+count);
+                        count++;
+                        if(newCurrentChar != '-'){
+                            maxWordsStr += newCurrentChar;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            String minSymbolsStr = "";
+            String maxSymbolsStr = "";
+            count = 1;
+            while (true){
+                count++;
+                char currentChar = userInput.charAt(w + count);
+                if(currentChar != '-'){
+                    minSymbolsStr += currentChar;
+                }
+                else {
+                    int position = w + count;
+                    count = 1;
+                    while (true){
+                        if (position+count > userInput.length()-1){
+                            break;
+                        }
+                        char newCurrentChar = userInput.charAt(position+count);
+                        count++;
+                        if(newCurrentChar != '-'){
+                            maxSymbolsStr += newCurrentChar;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+
+            int sentenceCount = Integer.parseInt(sentenceCountStr);
+            int minWords = Integer.parseInt(minWordsStr);
+            int maxWords = Integer.parseInt(maxWordsStr);
+            int minSymbols = Integer.parseInt(minSymbolsStr);
+            int maxSymbols = Integer.parseInt(maxSymbolsStr);
+
+            userSettings.setSentenceCount(sentenceCount);
+            userSettings.setMinWordsInSentence(minWords);
+            userSettings.setMaxWordsInSentence(maxWords);
+            userSettings.setMinSymbolsInWord(minSymbols);
+            userSettings.setMaxSymbolsInWord(maxSymbols);
+
+
+        //}
+//        catch (Exception e){
+//            System.out.println(e);
+//            throw new InvalidPropertiesFormatException("Invalid parameters");
+//        }
 
 
     }
