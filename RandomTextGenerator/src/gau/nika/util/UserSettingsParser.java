@@ -39,7 +39,7 @@ public class UserSettingsParser implements Parser {
             throw new InvalidPropertiesFormatException("Invalid parameters");
         }
 
-//        try {
+        try {
 
             String sentenceCountStr = "";
             int count = 1;
@@ -122,11 +122,11 @@ public class UserSettingsParser implements Parser {
             userSettings.setMaxSymbolsInWord(maxSymbols);
 
 
-        //}
-//        catch (Exception e){
-//            System.out.println(e);
-//            throw new InvalidPropertiesFormatException("Invalid parameters");
-//        }
+        }
+        catch (Exception e){
+            System.out.println(e);
+            throw new InvalidPropertiesFormatException("Invalid parameters");
+        }
 
 
     }
